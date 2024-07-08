@@ -5,3 +5,5 @@ edition = "2021"
 
 [dependencies]
 zerocopy = "0.7.35"
+zerocopy-derive = "0.7.35"
+

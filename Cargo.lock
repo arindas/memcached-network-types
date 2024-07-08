@@ -13,6 +13,7 @@ name = "memcached-types"
 version = "0.1.0"
 dependencies = [
  "zerocopy",
+ "zerocopy-derive",
 ]
 
 [[package]]
