@@ -149,6 +149,47 @@ impl ReqPacketHeader {
             }
         })
     }
+
+    pub fn ref_req_packet_header_with_opcode_from<const OPCODE: u8>(bytes: &[u8]) -> Option<&Self> {
+        const REQ_PACKET_MAGIC_BYTE: u8 = ReqMagicByte::ReqPacket as u8;
+
+        PacketHeader::ref_from(bytes).and_then(|packet_header| {
+            match (packet_header.magic_byte, packet_header.opcode) {
+                (REQ_PACKET_MAGIC_BYTE, opcode) if opcode == OPCODE => Some(unsafe {
+                    core::mem::transmute::<&PacketHeader, &ReqPacketHeader>(packet_header)
+                }),
+                _ => None,
+            }
+        })
+    }
+
+    pub fn ref_req_packet_header_with_get_opcode_from(bytes: &[u8]) -> Option<&Self> {
+        const REQ_PACKET_MAGIC_BYTE: u8 = ReqMagicByte::ReqPacket as u8;
+        const GET_OPCODE: u8 = Opcode::Get as u8;
+
+        PacketHeader::ref_from(bytes).and_then(|packet_header| {
+            match (packet_header.magic_byte, packet_header.opcode) {
+                (REQ_PACKET_MAGIC_BYTE, GET_OPCODE) => Some(unsafe {
+                    core::mem::transmute::<&PacketHeader, &ReqPacketHeader>(packet_header)
+                }),
+                _ => None,
+            }
+        })
+    }
+
+    pub fn ref_req_packet_header_with_set_opcode_from(bytes: &[u8]) -> Option<&Self> {
+        const REQ_PACKET_MAGIC_BYTE: u8 = ReqMagicByte::ReqPacket as u8;
+        const SET_OPCODE: u8 = Opcode::Set as u8;
+
+        PacketHeader::ref_from(bytes).and_then(|packet_header| {
+            match (packet_header.magic_byte, packet_header.opcode) {
+                (REQ_PACKET_MAGIC_BYTE, SET_OPCODE) => Some(unsafe {
+                    core::mem::transmute::<&PacketHeader, &ReqPacketHeader>(packet_header)
+                }),
+                _ => None,
+            }
+        })
+    }
 }
 
 #[repr(C)]
