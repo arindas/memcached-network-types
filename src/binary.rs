@@ -128,7 +128,7 @@ pub struct ReqPacketHeader {
     opcode: Opcode,
     key_length: u16,
     extras_length: u8,
-    data_type: u8,
+    data_type: DataType,
     vbucket: u16,
     total_body_length: u32,
     opaque: [u8; 4],
@@ -141,8 +141,9 @@ impl ReqPacketHeader {
             match (
                 ReqMagicByte::try_from(packet_header.magic_byte),
                 Opcode::try_from(packet_header.opcode),
+                DataType::try_from(packet_header.data_type),
             ) {
-                (Ok(_), Ok(_)) => Some(unsafe {
+                (Ok(_), Ok(_), Ok(_)) => Some(unsafe {
                     core::mem::transmute::<&PacketHeader, &ReqPacketHeader>(packet_header)
                 }),
                 _ => None,
@@ -161,10 +162,15 @@ impl ReqPacketHeader {
         bytes: &[u8],
     ) -> Option<&Self> {
         const REQ_PACKET_MAGIC_BYTE: u8 = ReqMagicByte::ReqPacket as u8;
+        const DATA_TYPE_BYTE: u8 = DataType::RawBytes as u8;
 
         PacketHeader::ref_from(bytes).and_then(|packet_header| {
-            match (packet_header.magic_byte, packet_header.opcode) {
-                (REQ_PACKET_MAGIC_BYTE, opcode) if opcode == OPCODE => Some(
+            match (
+                packet_header.magic_byte,
+                packet_header.opcode,
+                packet_header.data_type,
+            ) {
+                (REQ_PACKET_MAGIC_BYTE, opcode, DATA_TYPE_BYTE) if opcode == OPCODE => Some(
                     core::mem::transmute::<&PacketHeader, &ReqPacketHeader>(packet_header),
                 ),
                 _ => None,
@@ -194,7 +200,7 @@ pub struct ResPacketHeader {
     opcode: Opcode,
     key_length: u16,
     extras_length: u8,
-    data_type: u8,
+    data_type: DataType,
     status: ResponseStatus,
     total_body_length: u32,
     opaque: [u8; 4],
@@ -207,9 +213,10 @@ impl ResPacketHeader {
             match (
                 ResMagicByte::try_from(packet_header.magic_byte),
                 Opcode::try_from(packet_header.opcode),
+                DataType::try_from(packet_header.data_type),
                 ResponseStatus::try_from(u16::from_be_bytes(packet_header.status_or_vbucket)),
             ) {
-                (Ok(_), Ok(_), Ok(_)) => Some(unsafe {
+                (Ok(_), Ok(_), Ok(_), Ok(_)) => Some(unsafe {
                     core::mem::transmute::<&PacketHeader, &ResPacketHeader>(packet_header)
                 }),
                 _ => None,
@@ -222,7 +229,7 @@ impl ResPacketHeader {
 mod tests {
     use zerocopy::AsBytes;
 
-    use super::{Opcode, ReqPacketHeader, ResPacketHeader, ResponseStatus};
+    use super::{DataType, Opcode, ReqPacketHeader, ResPacketHeader, ResponseStatus};
 
     #[test]
     fn req_header_parse_consistent() {
@@ -231,7 +238,7 @@ mod tests {
             opcode: Opcode::Get,
             key_length: 0,
             extras_length: 0,
-            data_type: 0,
+            data_type: DataType::RawBytes,
             vbucket: 0,
             total_body_length: 0,
             opaque: [0; 4],
@@ -265,7 +272,7 @@ mod tests {
             opcode: Opcode::Get,
             key_length: 0,
             extras_length: 0,
-            data_type: 0,
+            data_type: DataType::RawBytes,
             status: ResponseStatus::NoError,
             total_body_length: 0,
             opaque: [0; 4],
