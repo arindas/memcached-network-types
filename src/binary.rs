@@ -108,7 +108,7 @@ integer_enum! {
 }
 
 #[repr(C)]
-#[derive(FromBytes, FromZeroes, AsBytes)]
+#[derive(FromBytes, FromZeroes, AsBytes, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PacketHeader {
     magic_byte: u8,
     opcode: u8,
@@ -122,7 +122,7 @@ pub struct PacketHeader {
 }
 
 #[repr(C)]
-#[derive(AsBytes)]
+#[derive(AsBytes, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ReqPacketHeader {
     magic_byte: ReqMagicByte,
     opcode: Opcode,
@@ -150,14 +150,23 @@ impl ReqPacketHeader {
         })
     }
 
-    pub fn ref_req_packet_header_with_opcode_from<const OPCODE: u8>(bytes: &[u8]) -> Option<&Self> {
+    /// Transumtes a [PacketHeader] read from the given bytes to a [ReqPacketHeader].
+    ///
+    /// This function ensures that the parsed packet header has [ReqMagicByte::ReqPacket] as its
+    /// magic byte and `OPCODE` as its opcode.
+    ///
+    /// # Safety
+    /// `OPCODE` needs to be a valid [Opcode] variant cast to `u8`
+    pub unsafe fn ref_req_packet_header_with_opcode_from<const OPCODE: u8>(
+        bytes: &[u8],
+    ) -> Option<&Self> {
         const REQ_PACKET_MAGIC_BYTE: u8 = ReqMagicByte::ReqPacket as u8;
 
         PacketHeader::ref_from(bytes).and_then(|packet_header| {
             match (packet_header.magic_byte, packet_header.opcode) {
-                (REQ_PACKET_MAGIC_BYTE, opcode) if opcode == OPCODE => Some(unsafe {
-                    core::mem::transmute::<&PacketHeader, &ReqPacketHeader>(packet_header)
-                }),
+                (REQ_PACKET_MAGIC_BYTE, opcode) if opcode == OPCODE => Some(
+                    core::mem::transmute::<&PacketHeader, &ReqPacketHeader>(packet_header),
+                ),
                 _ => None,
             }
         })
@@ -166,18 +175,20 @@ impl ReqPacketHeader {
     pub fn ref_req_packet_header_with_get_opcode_from(bytes: &[u8]) -> Option<&Self> {
         const GET_OPCODE: u8 = Opcode::Get as u8;
 
-        Self::ref_req_packet_header_with_opcode_from::<GET_OPCODE>(bytes)
+        // SAFETY: GET_OPCODE is Opcode::Get, a valid Opcode variant
+        unsafe { Self::ref_req_packet_header_with_opcode_from::<GET_OPCODE>(bytes) }
     }
 
     pub fn ref_req_packet_header_with_set_opcode_from(bytes: &[u8]) -> Option<&Self> {
         const SET_OPCODE: u8 = Opcode::Set as u8;
 
-        Self::ref_req_packet_header_with_opcode_from::<SET_OPCODE>(bytes)
+        // SAFETY: SET_OPCODE is Opcode::Set, a valid Opcode variant
+        unsafe { Self::ref_req_packet_header_with_opcode_from::<SET_OPCODE>(bytes) }
     }
 }
 
 #[repr(C)]
-#[derive(AsBytes)]
+#[derive(AsBytes, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ResPacketHeader {
     magic_byte: ResMagicByte,
     opcode: Opcode,
@@ -204,5 +215,67 @@ impl ResPacketHeader {
                 _ => None,
             }
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use zerocopy::AsBytes;
+
+    use super::{Opcode, ReqPacketHeader, ResPacketHeader, ResponseStatus};
+
+    #[test]
+    fn req_header_parse_consistent() {
+        let req_get_packet_header = ReqPacketHeader {
+            magic_byte: super::ReqMagicByte::ReqPacket,
+            opcode: Opcode::Get,
+            key_length: 0,
+            extras_length: 0,
+            data_type: 0,
+            vbucket: 0,
+            total_body_length: 0,
+            opaque: [0; 4],
+            cas: [0; 8],
+        };
+
+        let bytes = req_get_packet_header.as_bytes();
+
+        let req_get_packet_header_parsed = ReqPacketHeader::ref_from(bytes).unwrap();
+
+        assert!(&req_get_packet_header == req_get_packet_header_parsed);
+
+        const GET_OPCODE: u8 = Opcode::Get as u8;
+
+        let req_get_packet_header_parsed = unsafe {
+            ReqPacketHeader::ref_req_packet_header_with_opcode_from::<GET_OPCODE>(bytes).unwrap()
+        };
+
+        assert!(&req_get_packet_header == req_get_packet_header_parsed);
+
+        let req_get_packet_header_parsed =
+            ReqPacketHeader::ref_req_packet_header_with_get_opcode_from(bytes).unwrap();
+
+        assert!(&req_get_packet_header == req_get_packet_header_parsed);
+    }
+
+    #[test]
+    fn res_header_parse_consistent() {
+        let res_packet_header = ResPacketHeader {
+            magic_byte: super::ResMagicByte::ResPacket,
+            opcode: Opcode::Get,
+            key_length: 0,
+            extras_length: 0,
+            data_type: 0,
+            status: ResponseStatus::NoError,
+            total_body_length: 0,
+            opaque: [0; 4],
+            cas: [0; 8],
+        };
+
+        let bytes = res_packet_header.as_bytes();
+
+        let res_packet_header_parsed = ResPacketHeader::ref_from(bytes).unwrap();
+
+        assert!(&res_packet_header == res_packet_header_parsed);
     }
 }

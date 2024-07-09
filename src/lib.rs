@@ -6,7 +6,7 @@ pub mod binary;
 macro_rules! integer_enum {
     ($enum:ident, $repr:ty, { $( $variant:ident = $value:expr ),* $(,)? }) => {
         #[repr($repr)]
-        #[derive(zerocopy_derive::AsBytes)]
+        #[derive(zerocopy_derive::AsBytes, Ord, PartialOrd, Eq, PartialEq)]
         enum $enum {
             $( $variant = $value ),*
         }
