@@ -178,6 +178,30 @@ impl ReqPacketHeader {
         })
     }
 
+    pub fn req_get_packet_header_with_possible_opcode_from<'a>(
+        bytes: &'a [u8],
+        possible_opcodes: &[Opcode],
+    ) -> Option<&'a Self> {
+        const REQ_PACKET_MAGIC_BYTE: u8 = ReqMagicByte::ReqPacket as u8;
+        const DATA_TYPE_BYTE: u8 = DataType::RawBytes as u8;
+
+        PacketHeader::ref_from(bytes).and_then(|packet_header| {
+            match (
+                packet_header.magic_byte,
+                possible_opcodes
+                    .iter()
+                    .map(|x| *x as u8)
+                    .position(|x| x == packet_header.opcode),
+                packet_header.data_type,
+            ) {
+                (REQ_PACKET_MAGIC_BYTE, Some(_), DATA_TYPE_BYTE) => {
+                    Some(unsafe { core::mem::transmute::<&PacketHeader, &Self>(packet_header) })
+                }
+                _ => None,
+            }
+        })
+    }
+
     pub fn ref_req_packet_header_with_get_opcode_from(bytes: &[u8]) -> Option<&Self> {
         const GET_OPCODE: u8 = Opcode::Get as u8;
 
