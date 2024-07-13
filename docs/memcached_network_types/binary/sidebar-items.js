@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["DataType","Opcode","ReqMagicByte","ResMagicByte","ResponseStatus"],"struct":["PacketHeader","ReqPacketHeader","ResPacketHeader"]};
+window.SIDEBAR_ITEMS = {"enum":["DataType","Opcode","ReqMagicByte","ResMagicByte","ResponseStatus"],"struct":["PacketHeader","ReqPacketHeader","ResPacketHeader"],"trait":["AsBytes","FromBytes","FromZeroes"]};

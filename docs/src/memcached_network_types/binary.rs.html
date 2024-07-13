@@ -315,13 +315,11 @@
 <a href="#315" id="315">315</a>
 <a href="#316" id="316">316</a>
 <a href="#317" id="317">317</a>
-<a href="#318" id="318">318</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Provides types pertaining to Memcached binary [protocol](https://github.com/memcached/memcached/wiki/BinaryProtocolRevamped).
 
-</span><span class="kw">use </span>zerocopy::FromBytes;
+</span><span class="kw">use </span><span class="kw">crate</span>::integer_enum;
+<span class="kw">pub use </span>zerocopy::{AsBytes, FromBytes, FromZeroes};
 <span class="kw">use </span>zerocopy_derive::{AsBytes, FromBytes, FromZeroes};
-
-<span class="kw">use </span><span class="kw">crate</span>::integer_enum;
 
 <span class="macro">integer_enum!</span> {
     ReqMagicByte, u8, {

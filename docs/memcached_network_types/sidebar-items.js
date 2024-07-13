@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["binary","prelude"]};
+window.SIDEBAR_ITEMS = {"mod":["binary"]};
