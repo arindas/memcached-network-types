@@ -310,6 +310,12 @@
 <a href="#310" id="310">310</a>
 <a href="#311" id="311">311</a>
 <a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Provides types pertaining to Memcached binary [protocol](https://github.com/memcached/memcached/wiki/BinaryProtocolRevamped).
 
 </span><span class="kw">use </span>zerocopy::FromBytes;
@@ -490,7 +496,7 @@
         })
     }
 
-    <span class="kw">pub fn </span>req_get_packet_header_with_possible_opcode_from&lt;<span class="lifetime">'a</span>&gt;(
+    <span class="kw">pub fn </span>ref_req_packet_header_with_possible_opcode_from&lt;<span class="lifetime">'a</span>&gt;(
         bytes: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>[u8],
         possible_opcodes: <span class="kw-2">&amp;</span>[Opcode],
     ) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="self">Self</span>&gt; {
@@ -584,6 +590,12 @@
         <span class="kw">let </span>bytes = req_get_packet_header.as_bytes();
 
         <span class="kw">let </span>req_get_packet_header_parsed = ReqPacketHeader::ref_from(bytes).unwrap();
+
+        <span class="macro">assert!</span>(<span class="kw-2">&amp;</span>req_get_packet_header == req_get_packet_header_parsed);
+
+        <span class="kw">let </span>req_get_packet_header_parsed =
+            ReqPacketHeader::ref_req_packet_header_with_possible_opcode_from(bytes, <span class="kw-2">&amp;</span>[Opcode::Get])
+                .unwrap();
 
         <span class="macro">assert!</span>(<span class="kw-2">&amp;</span>req_get_packet_header == req_get_packet_header_parsed);
 
