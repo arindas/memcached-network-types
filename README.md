@@ -6,6 +6,9 @@
   <a href="https://github.com/arindas/memcached-network-types/actions/workflows/rust-ci.yml">
     <img src="https://github.com/arindas/memcached-network-types/actions/workflows/rust-ci.yml/badge.svg">
   </a>
+  <a href="https://crates.io/crates/memcached-network-types">
+  <img src="https://img.shields.io/crates/v/memcached-network-types" />
+  </a>
   <a href="https://github.com/arindas/memcached-network-types/actions/workflows/rustdoc.yml">
     <img src="https://github.com/arindas/memcached-network-types/actions/workflows/rustdoc.yml/badge.svg">
   </a>
@@ -21,7 +24,7 @@ Provides types for memcached protocol entities used for sending requests and res
 
 ```toml
 [dependencies]
-memcached-network-types = { git = "https://github.com/arindas/memcached-network-types.git" }
+memcached-network-types = "0.1.0"
 ```
 
 Refer to latest git [API Documentation](https://arindas.github.io/memcached-network-types/docs/memcached_network_types/)
