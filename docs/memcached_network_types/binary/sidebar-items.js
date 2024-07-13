@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["DataType","Opcode","ReqMagicByte","ResMagicByte","ResponseStatus"],"struct":["PacketHeader","ReqPacketHeader","ResPacketHeader"]};

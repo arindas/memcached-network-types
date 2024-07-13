@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["memcached_network_types"];
