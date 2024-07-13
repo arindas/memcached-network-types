@@ -178,7 +178,7 @@ impl ReqPacketHeader {
         })
     }
 
-    pub fn req_get_packet_header_with_possible_opcode_from<'a>(
+    pub fn ref_req_packet_header_with_possible_opcode_from<'a>(
         bytes: &'a [u8],
         possible_opcodes: &[Opcode],
     ) -> Option<&'a Self> {
@@ -272,6 +272,12 @@ mod tests {
         let bytes = req_get_packet_header.as_bytes();
 
         let req_get_packet_header_parsed = ReqPacketHeader::ref_from(bytes).unwrap();
+
+        assert!(&req_get_packet_header == req_get_packet_header_parsed);
+
+        let req_get_packet_header_parsed =
+            ReqPacketHeader::ref_req_packet_header_with_possible_opcode_from(bytes, &[Opcode::Get])
+                .unwrap();
 
         assert!(&req_get_packet_header == req_get_packet_header_parsed);
 
