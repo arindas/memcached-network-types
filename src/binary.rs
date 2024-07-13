@@ -110,29 +110,29 @@ integer_enum! {
 #[repr(C)]
 #[derive(FromBytes, FromZeroes, AsBytes, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PacketHeader {
-    magic_byte: u8,
-    opcode: u8,
-    key_length: [u8; 2],
-    extras_length: u8,
-    data_type: u8,
-    status_or_vbucket: [u8; 2],
-    total_body_length: [u8; 4],
-    opaque: [u8; 4],
-    cas: [u8; 8],
+    pub magic_byte: u8,
+    pub opcode: u8,
+    pub key_length: [u8; 2],
+    pub extras_length: u8,
+    pub data_type: u8,
+    pub status_or_vbucket: [u8; 2],
+    pub total_body_length: [u8; 4],
+    pub opaque: [u8; 4],
+    pub cas: [u8; 8],
 }
 
 #[repr(C)]
 #[derive(AsBytes, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ReqPacketHeader {
-    magic_byte: ReqMagicByte,
-    opcode: Opcode,
-    key_length: u16,
-    extras_length: u8,
-    data_type: DataType,
-    vbucket: u16,
-    total_body_length: u32,
-    opaque: [u8; 4],
-    cas: [u8; 8],
+    pub magic_byte: ReqMagicByte,
+    pub opcode: Opcode,
+    pub key_length: u16,
+    pub extras_length: u8,
+    pub data_type: DataType,
+    pub vbucket: u16,
+    pub total_body_length: u32,
+    pub opaque: [u8; 4],
+    pub cas: [u8; 8],
 }
 
 impl ReqPacketHeader {
@@ -220,15 +220,15 @@ impl ReqPacketHeader {
 #[repr(C)]
 #[derive(AsBytes, PartialEq, Eq, PartialOrd, Ord)]
 pub struct ResPacketHeader {
-    magic_byte: ResMagicByte,
-    opcode: Opcode,
-    key_length: u16,
-    extras_length: u8,
-    data_type: DataType,
-    status: ResponseStatus,
-    total_body_length: u32,
-    opaque: [u8; 4],
-    cas: [u8; 8],
+    pub magic_byte: ResMagicByte,
+    pub opcode: Opcode,
+    pub key_length: u16,
+    pub extras_length: u8,
+    pub data_type: DataType,
+    pub status: ResponseStatus,
+    pub total_body_length: u32,
+    pub opaque: [u8; 4],
+    pub cas: [u8; 8],
 }
 
 impl ResPacketHeader {
