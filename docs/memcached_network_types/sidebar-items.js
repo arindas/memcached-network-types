@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":["integer_enum"],"mod":["binary","prelude"]};
+window.SIDEBAR_ITEMS = {"mod":["binary","prelude"]};
