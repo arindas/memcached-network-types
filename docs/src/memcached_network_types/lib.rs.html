@@ -30,6 +30,8 @@
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
 <a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc = <span class="macro">include_str!</span>(<span class="string">"../README.md"</span>)]
 #![no_std]
 
@@ -59,7 +61,9 @@
 }
 
 <span class="kw">pub mod </span>prelude {
-    <span class="kw">pub use </span><span class="kw">crate</span>::binary::<span class="kw-2">*</span>;
-    <span class="kw">pub use </span>zerocopy::<span class="kw-2">*</span>;
+    <span class="doccomment">//! Prelude for `memcached_network_types`
+
+    </span><span class="kw">pub use </span><span class="kw">crate</span>::binary::<span class="kw-2">*</span>;
+    <span class="kw">pub use </span>zerocopy::{AsBytes, FromBytes, FromZeroes};
 }
 </code></pre></div></section></main></body></html>

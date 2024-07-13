@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["BigEndian","LittleEndian"],"macro":["include_value","transmute","transmute_mut","transmute_ref"],"mod":["byteorder"],"struct":["F32","F64","I128","I16","I32","I64","Ptr","Ref","U128","U16","U32","U64","Unalign"],"trait":["AsBytes","ByteOrder","ByteSlice","ByteSliceMut","FromBytes","FromZeroes","Unaligned"],"type":["BE","LE","NativeEndian","NetworkEndian"]};
+window.SIDEBAR_ITEMS = {"trait":["AsBytes","FromBytes","FromZeroes"]};
