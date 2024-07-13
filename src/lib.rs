@@ -27,6 +27,8 @@ macro_rules! integer_enum {
 }
 
 pub mod prelude {
+    //! Prelude for `memcached_network_types`
+
     pub use crate::binary::*;
-    pub use zerocopy::*;
+    pub use zerocopy::{AsBytes, FromBytes, FromZeroes};
 }
