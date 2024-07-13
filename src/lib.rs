@@ -3,6 +3,7 @@
 
 pub mod binary;
 
+#[doc(hidden)]
 #[macro_export]
 macro_rules! integer_enum {
     ($enum:ident, $repr:ty, { $( $variant:ident = $value:expr ),* $(,)? }) => {
