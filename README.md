@@ -30,7 +30,7 @@ for more details.
 ### Example
 
 ```rust
-use memcached_network_types::prelude::*;
+use memcached_network_types::binary::*;
 
 let req_get_packet_header = ReqPacketHeader {
     magic_byte: ReqMagicByte::ReqPacket,

@@ -1,9 +1,8 @@
 //! Provides types pertaining to Memcached binary [protocol](https://github.com/memcached/memcached/wiki/BinaryProtocolRevamped).
 
-use zerocopy::FromBytes;
-use zerocopy_derive::{AsBytes, FromBytes, FromZeroes};
-
 use crate::integer_enum;
+pub use zerocopy::{AsBytes, FromBytes, FromZeroes};
+use zerocopy_derive::{AsBytes, FromBytes, FromZeroes};
 
 integer_enum! {
     ReqMagicByte, u8, {
