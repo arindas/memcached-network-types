@@ -1,3 +1,4 @@
+#![doc = include_str!("../README.md")]
 #![no_std]
 
 pub mod binary;
@@ -23,4 +24,9 @@ macro_rules! integer_enum {
             }
         }
     };
+}
+
+pub mod prelude {
+    pub use crate::binary::*;
+    pub use zerocopy::*;
 }
