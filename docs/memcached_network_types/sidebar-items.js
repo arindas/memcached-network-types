@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["binary"]};
+window.SIDEBAR_ITEMS = {"mod":["binary","udp"]};
