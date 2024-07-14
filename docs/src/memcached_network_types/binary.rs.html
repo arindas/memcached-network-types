@@ -430,11 +430,11 @@
 }
 
 <span class="attr">#[repr(C)]
-#[derive(FromBytes, FromZeroes, AsBytes, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(FromBytes, FromZeroes, AsBytes, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>PacketHeader {
     <span class="kw">pub </span>magic_byte: u8,
     <span class="kw">pub </span>opcode: u8,
-    <span class="kw">pub </span>key_length: [u8; <span class="number">2</span>],
+    <span class="kw">pub </span>key_length: U16,
     <span class="kw">pub </span>extras_length: u8,
     <span class="kw">pub </span>data_type: u8,
     <span class="kw">pub </span>status_or_vbucket: [u8; <span class="number">2</span>],
