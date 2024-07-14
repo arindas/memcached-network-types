@@ -2,6 +2,7 @@
 #![no_std]
 
 pub mod binary;
+pub mod udp;
 
 #[doc(hidden)]
 #[macro_export]

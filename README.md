@@ -24,7 +24,7 @@ Provides types for memcached protocol entities used for sending requests and res
 
 ```toml
 [dependencies]
-memcached-network-types = "0.1.0"
+memcached-network-types = "0.1.1"
 ```
 
 Refer to latest git [API Documentation](https://arindas.github.io/memcached-network-types/docs/memcached_network_types/)
@@ -38,11 +38,11 @@ use memcached_network_types::binary::*;
 let req_get_packet_header = ReqPacketHeader {
     magic_byte: ReqMagicByte::ReqPacket,
     opcode: Opcode::Get,
-    key_length: 0,
+    key_length: 0.into(),
     extras_length: 0,
     data_type: DataType::RawBytes,
-    vbucket: 0,
-    total_body_length: 0,
+    vbucket: 0.into(),
+    total_body_length: 0.into(),
     opaque: [0; 4],
     cas: [0; 8],
 };
@@ -50,6 +50,12 @@ let req_get_packet_header = ReqPacketHeader {
 let bytes = req_get_packet_header.as_bytes();
 
 let req_get_packet_header_parsed = ReqPacketHeader::ref_from(bytes).unwrap();
+
+assert!(&req_get_packet_header == req_get_packet_header_parsed);
+
+let req_get_packet_header_parsed =
+    ReqPacketHeader::ref_req_packet_header_with_possible_opcode_from(bytes, &[Opcode::Get])
+        .unwrap();
 
 assert!(&req_get_packet_header == req_get_packet_header_parsed);
 
