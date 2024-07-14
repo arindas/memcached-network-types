@@ -108,11 +108,11 @@ integer_enum! {
 }
 
 #[repr(C)]
-#[derive(FromBytes, FromZeroes, AsBytes, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(FromBytes, FromZeroes, AsBytes, PartialEq, Eq)]
 pub struct PacketHeader {
     pub magic_byte: u8,
     pub opcode: u8,
-    pub key_length: [u8; 2],
+    pub key_length: U16,
     pub extras_length: u8,
     pub data_type: u8,
     pub status_or_vbucket: [u8; 2],
