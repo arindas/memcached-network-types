@@ -115,10 +115,16 @@ pub struct PacketHeader {
     pub key_length: U16,
     pub extras_length: u8,
     pub data_type: u8,
-    pub status_or_vbucket: [u8; 2],
-    pub total_body_length: [u8; 4],
+    pub status_or_vbucket: U16,
+    pub total_body_length: U32,
     pub opaque: [u8; 4],
     pub cas: [u8; 8],
+}
+
+impl PacketHeader {
+    pub fn value_length(&self) -> u32 {
+        self.total_body_length.get() - (self.key_length.get() + self.extras_length as u16) as u32
+    }
 }
 
 #[repr(C)]
@@ -239,7 +245,7 @@ impl ResPacketHeader {
             ResMagicByte::try_from(packet_header.magic_byte),
             Opcode::try_from(packet_header.opcode),
             DataType::try_from(packet_header.data_type),
-            ResponseStatus::try_from(U16::from_bytes(packet_header.status_or_vbucket).get()),
+            ResponseStatus::try_from(packet_header.status_or_vbucket.get()),
         ) {
             (Ok(_), Ok(_), Ok(_), Ok(_)) => Some(unsafe {
                 core::mem::transmute::<&PacketHeader, &ResPacketHeader>(packet_header)

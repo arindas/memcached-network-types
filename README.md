@@ -24,7 +24,7 @@ Provides types for memcached protocol entities used for sending requests and res
 
 ```toml
 [dependencies]
-memcached-network-types = "0.1.2"
+memcached-network-types = "0.1.3"
 ```
 
 Refer to latest git [API Documentation](https://arindas.github.io/memcached-network-types/docs/memcached_network_types/)
