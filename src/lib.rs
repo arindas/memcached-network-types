@@ -4,7 +4,7 @@
 pub mod binary;
 pub mod udp;
 
-#[doc(hidden)]
+/// Creates an enum with integer variants.
 #[macro_export]
 macro_rules! integer_enum {
     ($enum:ident, $repr:ty, { $( $variant:ident = $value:expr ),* $(,)? }) => {
@@ -25,5 +25,15 @@ macro_rules! integer_enum {
                 }
             }
         }
+    };
+}
+
+/// Creates constants from [integer_enum] variants.
+#[macro_export]
+macro_rules! integer_enum_variant_constants {
+    ($enum_name:ident, $type:ty, $(($constant_name:ident, $variant_name:ident)),*) => {
+        $(
+            const $constant_name: $type = $enum_name::$variant_name as $type;
+        )*
     };
 }

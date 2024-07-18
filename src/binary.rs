@@ -125,6 +125,20 @@ impl PacketHeader {
     pub fn value_length(&self) -> u32 {
         self.total_body_length.get() - (self.key_length.get() + self.extras_length as u16) as u32
     }
+
+    pub fn from_packet_header_without_opaque_and_cas(packet_header: &Self) -> Self {
+        Self {
+            magic_byte: packet_header.magic_byte,
+            opcode: packet_header.opcode,
+            key_length: packet_header.key_length,
+            extras_length: packet_header.extras_length,
+            data_type: packet_header.data_type,
+            status_or_vbucket: packet_header.status_or_vbucket,
+            total_body_length: packet_header.total_body_length,
+            opaque: [0; 4],
+            cas: [0; 8],
+        }
+    }
 }
 
 #[repr(C)]
